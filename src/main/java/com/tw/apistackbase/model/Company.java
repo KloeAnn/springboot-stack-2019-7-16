@@ -3,6 +3,8 @@ package com.tw.apistackbase.model;
 import java.util.List;
 
 public class Company {
+    private long id;
+
     private String companyName;
 
     private List<Employee> employees;
@@ -16,6 +18,21 @@ public class Company {
         this.companyName = companyName;
         this.employees = employees;
         this.employeeNumber = employeeNumber;
+    }
+
+    public Company(long id,String companyName, List<Employee> employees, int employeeNumber) {
+        this.id = id;
+        this.companyName = companyName;
+        this.employees = employees;
+        this.employeeNumber = employeeNumber;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getCompanyName() {
