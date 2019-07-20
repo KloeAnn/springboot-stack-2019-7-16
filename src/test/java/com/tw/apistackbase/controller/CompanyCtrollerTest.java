@@ -34,7 +34,7 @@ public class CompanyCtrollerTest {
     CompanyRepository companyRepository;
 
     @Test
-    public void should_return_conpanies_when_get_companies()throws Exception{
+    public void should_return_companies_when_get_companies()throws Exception{
         List<Company> mockCompanies= new ArrayList<Company>();
         List<Employee> employees = new ArrayList<Employee>();
         employees.add(new Employee(10002, "Test", 15, "male", 6000));
@@ -49,7 +49,7 @@ public class CompanyCtrollerTest {
     }
 
     @Test
-    public void should_return_conpanies_when_get_companies_by_id()throws Exception{
+    public void should_return_companies_when_get_companies_by_id()throws Exception{
         List<Employee> employees = new ArrayList<Employee>();
         employees.add(new Employee(10001, "Test", 15, "male", 6000));
         Company mockCompany= new Company(101,"OOCL", employees, 1);
@@ -72,6 +72,23 @@ public class CompanyCtrollerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json("[{\"id\":10001,\"name\":\"Test\",\"age\":15,\"gender\":\"male\"}]"));
+
+    }
+
+    @Test
+    public void should_return_companies_when_get_companies_by_page_and_page_size()throws Exception {
+        List<Employee> employees = new ArrayList<Employee>();
+        employees.add(new Employee(10001, "Test", 15, "male", 6000));
+        List<Company>list=new ArrayList<Company>(){{
+            add(new Company(101,"OOCL", employees, 1));
+            add(new Company(102,"TS", employees, 1));
+        }};
+        Mockito.when(companyRepository.getCompanies()).thenReturn(list);
+
+        mockMvc.perform(get("/companies?page=1&pageSize=1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json("[{\"id\":101,\"companyName\":\"OOCL\",\"employees\":[{\"id\":10001,\"name\":\"Test\",\"age\":15,\"gender\":\"male\"}],\"employeeNumber\":1}"));
 
     }
 

@@ -18,8 +18,10 @@ public class CompanyCtroller {
     CompanyRepository companyRepository;
 
     @GetMapping("/companies")
-    public ResponseEntity<List<Company>> getCompanies(){
-        return ResponseEntity.ok(companyRepository.getCompanies());
+    public ResponseEntity<List<Company>> getCompanies(@RequestParam(value="page",defaultValue ="0")int page,@RequestParam(value = "pageSize",defaultValue = "0") int pageSize){
+        List<Company>list=companyRepository.getCompanies();
+        return (page == 0 && pageSize == 0 || pageSize > list.size()) ? ResponseEntity.ok(companyRepository.getCompanies())
+                : ResponseEntity.ok(list.subList(page - 1, pageSize));
     }
 
     @GetMapping("/companies/{id}")
