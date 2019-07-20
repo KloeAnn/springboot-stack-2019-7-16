@@ -20,8 +20,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @RunWith(SpringRunner.class)
@@ -145,7 +144,7 @@ public class CompanyCtrollerTest {
         mockMvc.perform(put("/companies/1111")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content("{\n" +
-                        "    \"companyId\": 1111,\n" +
+                        "    \"id\": 1111,\n" +
                         "    \"companyName\": \"OOTESTUPDATE\",\n" +
                         "    \"employees\": [\n" +
                         "        {\n" +
@@ -160,7 +159,7 @@ public class CompanyCtrollerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\n" +
-                        "    \"companyId\": 1111,\n" +
+                        "    \"id\": 1111,\n" +
                         "    \"companyName\": \"OOTESTUPDATE\",\n" +
                         "    \"employees\": [\n" +
                         "        {\n" +
@@ -172,6 +171,20 @@ public class CompanyCtrollerTest {
                         "    ],\n" +
                         "    \"employeeNumber\": 1\n" +
                         "}"));
+    }
+
+    @Test
+    public void should_return_not_found_when_delete_companies_by_id()throws Exception{
+        List<Company> mockCompanies= new ArrayList<>();
+        List<Employee> employees = new ArrayList<>();
+        employees.add(new Employee(10002, "Test", 15, "male", 6000));
+        mockCompanies.add(new Company(1111, "OOCL", employees, 1));
+        Mockito.when(companyRepository.getCompanies()).thenReturn(mockCompanies);
+
+        mockMvc.perform(delete("/companies/1111")
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
     }
 

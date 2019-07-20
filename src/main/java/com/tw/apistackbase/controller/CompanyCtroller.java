@@ -38,11 +38,18 @@ public class CompanyCtroller {
     }
 
     @PutMapping("/companies/{id}")
-    public ResponseEntity updateCompany(@RequestParam(name = "id") long id,@RequestBody Company company){
+    public ResponseEntity updateCompany(@PathVariable(name = "id")long id,@RequestBody Company company){
         Company oldCompany=companyRepository.getCompaniesById(id);
-        int position=companyRepository.getCompanies().indexOf(oldCompany);
         companyRepository.getCompanies().remove(oldCompany);
-        companyRepository.getCompanies().add(position,company);
+        companyRepository.getCompanies().add(company);
         return ResponseEntity.ok(company);
+    }
+
+    @DeleteMapping("/companies/{id}")
+    public ResponseEntity deleteCompany(@PathVariable(name = "id")long id){
+       Company company=companyRepository.getCompaniesById(id);
+       companyRepository.getCompanies().remove(company);
+       Company resCompany=companyRepository.getCompanies().stream().filter(i->i.getId()==id).findFirst().orElse(null);
+       return ResponseEntity.notFound().build();
     }
 }
