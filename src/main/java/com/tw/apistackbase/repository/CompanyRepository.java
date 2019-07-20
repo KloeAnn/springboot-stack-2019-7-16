@@ -31,4 +31,8 @@ public class CompanyRepository {
         List<Company>list=getCompanies();
         return list.stream().filter(i->i.getId()==id).findFirst().orElse(null).getEmployees();
     }
+
+    public void addCompanies(Company company){
+        getCompanies().add(company);
+    }
 }

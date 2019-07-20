@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -18,6 +19,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -92,5 +94,45 @@ public class CompanyCtrollerTest {
 
     }
 
+    @Test
+    public void should_return_company_when_add_company()throws Exception{
+        List<Company> companies= new ArrayList<>();
+        List<Employee> employees = new ArrayList<>();
+
+        employees.add(new Employee(10002, "Test", 15, "male", 6000));
+        companies.add(new Company(1111, "OOCL", employees, 1));
+        Mockito.when(companyRepository.getCompanies()).thenReturn(companies);
+
+        mockMvc.perform(post("/companies")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content("{\n" +
+                        "    \"companyName\": \"OOTEST\",\n" +
+                        "    \"employees\": [\n" +
+                        "        {\n" +
+                        "            \"id\": 10004,\n" +
+                        "            \"name\": \"Test04\",\n" +
+                        "            \"age\": 15,\n" +
+                        "            \"gender\": \"male\"\n" +
+                        "        }\n" +
+                        "    ],\n" +
+                        "    \"employeeNumber\": 1\n" +
+                        "}"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json("{\n" +
+                        "    \"companyId\": 1112,\n" +
+                        "    \"companyName\": \"OOTEST\",\n" +
+                        "    \"employees\": [\n" +
+                        "        {\n" +
+                        "            \"id\": 10004,\n" +
+                        "            \"name\": \"Test04\",\n" +
+                        "            \"age\": 15,\n" +
+                        "            \"gender\": \"male\"\n" +
+                        "        }\n" +
+                        "    ],\n" +
+                        "    \"employeeNumber\": 1\n" +
+                        "}"));
     }
+    }
+
 
