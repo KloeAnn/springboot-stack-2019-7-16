@@ -36,4 +36,13 @@ public class CompanyCtroller {
         companyRepository.addCompanies(company);
         return ResponseEntity.ok(company);
     }
+
+    @PutMapping("/companies/{id}")
+    public ResponseEntity updateCompany(@RequestParam(name = "id") long id,@RequestBody Company company){
+        Company oldCompany=companyRepository.getCompaniesById(id);
+        int position=companyRepository.getCompanies().indexOf(oldCompany);
+        companyRepository.getCompanies().remove(oldCompany);
+        companyRepository.getCompanies().add(position,company);
+        return ResponseEntity.ok(company);
+    }
 }
