@@ -26,4 +26,9 @@ public class CompanyCtroller {
     public ResponseEntity<Company> getCompaniesById(@PathVariable(name = "id") long id){
         return ResponseEntity.ok(companyRepository.getCompaniesById(id));
     }
+
+    @GetMapping("/companies/{id}/employees")
+    public ResponseEntity getEmployeesByCompanyId(@PathVariable(name = "id") long id){
+        return ResponseEntity.ok(companyRepository.getEmployeesByCompanyId(id));
+    }
 }

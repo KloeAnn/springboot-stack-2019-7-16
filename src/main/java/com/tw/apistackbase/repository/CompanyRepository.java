@@ -26,4 +26,9 @@ public class CompanyRepository {
         List<Company>list=getCompanies();
         return list.stream().filter(i->i.getId()==id).findFirst().orElse(null);
     }
+
+    public List<Employee> getEmployeesByCompanyId(long id) {
+        List<Company>list=getCompanies();
+        return list.stream().filter(i->i.getId()==id).findFirst().orElse(null).getEmployees();
+    }
 }

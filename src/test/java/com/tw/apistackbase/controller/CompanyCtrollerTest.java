@@ -61,5 +61,19 @@ public class CompanyCtrollerTest {
                 .andExpect(content().json("{\"id\":101,\"companyName\":\"OOCL\",\"employees\":[{\"id\":10001,\"name\":\"Test\",\"age\":15,\"gender\":\"male\"}],\"employeeNumber\":1}"));
 
     }
+
+    @Test
+    public void should_return_employees_when_get_employees_by_id()throws Exception{
+        List<Employee> employees = new ArrayList<Employee>();
+        employees.add(new Employee(10001, "Test", 15, "male", 6000));
+        Mockito.when(companyRepository.getEmployeesByCompanyId(101)).thenReturn(employees);
+
+        mockMvc.perform(get("/companies/101/employees"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json("[{\"id\":10001,\"name\":\"Test\",\"age\":15,\"gender\":\"male\"}]"));
+
+    }
+
     }
 
