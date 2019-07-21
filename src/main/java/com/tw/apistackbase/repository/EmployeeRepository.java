@@ -33,6 +33,10 @@ public class EmployeeRepository {
         return  list;
     }
 
+    public void addEmployee(Employee employee) {
+         getEmployees().add(employee);
+    }
+
     public List<Employee> getEmployees() {
         return employees;
     }
