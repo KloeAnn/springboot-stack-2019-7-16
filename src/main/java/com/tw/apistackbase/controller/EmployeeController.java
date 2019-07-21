@@ -36,5 +36,13 @@ public class EmployeeController {
         return ResponseEntity.ok(employee);
     }
 
+    @PutMapping("/employees/{id}")
+    public ResponseEntity updateEmployee(@PathVariable(name = "id")long id,@RequestBody Employee employee){
+        Employee oldEmployee=employeeRepository.getEmployeeById(id);
+        employeeRepository.getEmployees().remove(oldEmployee);
+        employeeRepository.getEmployees().add(employee);
+        return ResponseEntity.ok(employee);
+    }
+
 
 }

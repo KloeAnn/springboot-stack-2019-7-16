@@ -19,10 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -93,7 +92,7 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    public void should_return_employee_with_id_when_post_employee_api() throws Exception {
+    public void should_return_employee_with_id_when_post_employee() throws Exception {
         List<Employee> mockEmployeeList = new ArrayList<>();
         mockEmployeeList.add(new Employee(10001, "Test", 15, "male", 6000));
         Mockito.when(employeeRepository.getEmployees()).thenReturn(mockEmployeeList);
@@ -111,5 +110,24 @@ public class EmployeeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(10002));
 
+    }
+
+    @Test
+    public void should_return_employee_with_update_name_when_request_to_update_employee_by_id() throws Exception {
+        List<Employee> mockEmployeeList = new ArrayList<>();
+        mockEmployeeList.add(new Employee(10001, "Test", 15, "male", 6000));
+        Mockito.when(employeeRepository.getEmployees()).thenReturn(mockEmployeeList);
+
+        mockMvc.perform(put("/employees/10001")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content("    {\n" +
+                        "        \"name\": \"name\",\n" +
+                        "        \"age\": 15,\n" +
+                        "        \"gender\": \"male\",\n" +
+                        "        \"salary\": 6000\n" +
+                        "    }"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("name"));
     }
 }
