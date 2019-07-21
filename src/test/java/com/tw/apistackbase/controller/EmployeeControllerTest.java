@@ -36,8 +36,8 @@ public class EmployeeControllerTest {
     private EmployeeRepository employeeRepository;
 
     @Test
-    public void should_return_employees_when_get_employees()throws Exception{
-        List<Employee>employees=new ArrayList<>();
+    public void should_return_employees_when_get_employees() throws Exception {
+        List<Employee> employees = new ArrayList<>();
         employees.add(new Employee(1, "01-name", 15, "male", 6000));
 
         Mockito.when(employeeRepository.getEmployees()).thenReturn(employees);
@@ -49,9 +49,9 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    public void should_return_employee_when_get_employee_with_id()throws Exception{
+    public void should_return_employee_when_get_employee_with_id() throws Exception {
 
-        Employee employee=new Employee(1, "01-name", 15, "male", 6000);
+        Employee employee = new Employee(1, "01-name", 15, "male", 6000);
 
         Mockito.when(employeeRepository.getEmployeeById(1)).thenReturn(employee);
 
@@ -59,5 +59,20 @@ public class EmployeeControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1));
+    }
+
+    @Test
+    public void should_return_employee__when_get_employee_with_page_and_page_size() throws Exception {
+        List<Employee> mockEmployeeList = new ArrayList<>();
+        mockEmployeeList.add(new Employee(10001, "Test", 15, "male", 6000));
+        mockEmployeeList.add(new Employee(10002, "Test2", 17, "female", 7000));
+        mockEmployeeList.add(new Employee(10003, "Test3", 19, "male", 8000));
+        Mockito.when(employeeRepository.getEmployees()).thenReturn(mockEmployeeList);
+
+        mockMvc.perform(get("/employees?page=2&pageSize=3"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].id").value(10002))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[1].id").value(10003));
     }
 }

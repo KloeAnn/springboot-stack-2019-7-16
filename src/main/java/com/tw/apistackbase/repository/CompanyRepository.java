@@ -9,7 +9,7 @@ import java.util.List;
 
 @Component
 public class CompanyRepository {
-    private List<Company>companies=new ArrayList<>();
+    private List<Company>companies;
 
     public CompanyRepository() {
         this.companies = new ArrayList<>();
