@@ -1,5 +1,7 @@
 package com.tw.apistackbase.model;
 
+import org.springframework.stereotype.Component;
+
 public class Employee {
 
     private long id;
