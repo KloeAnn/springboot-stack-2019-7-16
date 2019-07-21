@@ -130,4 +130,17 @@ public class EmployeeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("name"));
     }
+
+    @Test
+    public void should_not_return_the_delete_company_when_request_delete_company_by_id() throws Exception {
+        List<Employee> mockEmployeeList = new ArrayList<>();
+        mockEmployeeList.add(new Employee(10001, "Test", 15, "male", 6000));
+        Mockito.when(employeeRepository.getEmployees()).thenReturn(mockEmployeeList);
+
+        mockMvc.perform(delete("/employees/10001")
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+
+    }
 }

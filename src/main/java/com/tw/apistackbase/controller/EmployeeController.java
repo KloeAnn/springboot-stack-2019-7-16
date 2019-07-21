@@ -44,5 +44,11 @@ public class EmployeeController {
         return ResponseEntity.ok(employee);
     }
 
-
+    @DeleteMapping("/employees/{id}")
+    public ResponseEntity updateEmployee(@PathVariable(name = "id")long id){
+        Employee employee=employeeRepository.getEmployeeById(id);
+        employeeRepository.getEmployees().remove(employee);
+        Employee resEmployee=employeeRepository.getEmployees().stream().filter(i->i.getId()==id).findFirst().orElse(null);
+        return ResponseEntity.notFound().build();
+    }
 }
