@@ -75,4 +75,18 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[0].id").value(10002))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[1].id").value(10003));
     }
+
+    @Test
+    public void should_return_gender_is_female_when_request_employees_by_gender_api() throws Exception {
+        List<Employee> mockEmployeeList = new ArrayList<>();
+        mockEmployeeList.add(new Employee(10001, "Test", 15, "male", 6000));
+        mockEmployeeList.add(new Employee(10002, "Test2", 17, "female", 7000));
+        mockEmployeeList.add(new Employee(10003, "Test3", 19, "male", 8000));
+        Mockito.when(employeeRepository.getEmployees()).thenReturn(mockEmployeeList);
+
+        mockMvc.perform(get("/employees?gender=female"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].gender").value("female"));
+    }
 }
